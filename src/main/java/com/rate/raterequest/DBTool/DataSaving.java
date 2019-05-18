@@ -1,13 +1,11 @@
 package com.rate.raterequest.DBTool;
 
 import com.rate.raterequest.Service.RMYHService;
-import com.rate.raterequest.bean.CountryInfoModel;
-import com.rate.raterequest.bean.DataModel;
-import com.rate.raterequest.bean.RateModel;
-import com.rate.raterequest.bean.RecordModel;
+import com.rate.raterequest.Service.ZGYHService;
+import com.rate.raterequest.bean.*;
 import com.rate.raterequest.common.DBTables;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+
+import java.util.List;
 
 /***
  * 保存数据
@@ -16,6 +14,7 @@ public class DataSaving {
     private RateModel _rateModel; // 当前传入的model
     private RMYHService _service; // 当前service对象
     private DataModel _dateInfo; // 保存过的时间戳
+    private ZGYHService _zgyhService; // 中国银行的service
     /***
      * 保存人民银行的汇率信息
      * @param rateModel
@@ -43,7 +42,7 @@ public class DataSaving {
         // 存储数据
         _service.insertRecordData(recordModel,
                                     Integer.parseInt(_dateInfo.getId()),
-                                    Integer.parseInt(c.getId()),
+                                    c.getId(),
                                     DBTables.getTableName(recordModel.getForeignCName()));
     }
 
@@ -61,5 +60,40 @@ public class DataSaving {
         return true;
     }
 
+    /***
+     * 保存中国银行捕获的数据
+     * @param models
+     * @param as
+     */
+    public void saving_zgyh_rate(List<WebZGYHModel> models, ZGYHService as){
+        if (models.size() < 1){
+            return;
+        }
+        _zgyhService = as;
+        // 保存时间戳
+        WebZGYHDateModel date = new WebZGYHDateModel();
+        date.setDate(models.get(1).getAnnounceDate());
+        date.setTime(models.get(1).getAnnounceTime());
+        _zgyhService.saveDateInfo(date, DBTables.DATE_ZGYH_TABLE);
 
+        date = _zgyhService.getLastDateInfo(DBTables.DATE_ZGYH_TABLE);
+        for(WebZGYHModel m : models){
+            // 保存数据
+            saveZGYHData(m, date);
+        }
+    }
+
+    /***
+     * 单个保存中国银行的数据
+     * @param model
+     */
+    private void saveZGYHData(WebZGYHModel model, WebZGYHDateModel date){
+        if (model == null){
+            return;
+        }
+        // 获取国家信息
+        CountryInfoModel country = _zgyhService.getCountryInfo(model.getMoneyName(), DBTables.COUNTRY_RATE_TABLE);
+        // 保存信息
+        _zgyhService.insertRateInfo(model, country.getId(), date.getId(), DBTables.RATE_ZGYH_TABLE);
+    }
 }

@@ -7,7 +7,7 @@ public class CountryInfoModel {
     /***
      * id - 编号
      */
-    private String id;
+    private int id;
 
     /***
      * country_name - 国家名称 中文
@@ -29,11 +29,11 @@ public class CountryInfoModel {
      */
     private String money_cn;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -69,7 +69,7 @@ public class CountryInfoModel {
         this.money_cn = money_cn;
     }
 
-    public CountryInfoModel(String id, String country_name, String money_en, String icon, String money_cn) {
+    public CountryInfoModel(int id, String country_name, String money_en, String icon, String money_cn) {
         this.id = id;
         this.country_name = country_name;
         this.money_en = money_en;

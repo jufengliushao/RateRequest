@@ -134,6 +134,15 @@ public class DBTables {
      */
     public static String ZAR_RATE_TABLE = "ZAR_Money";
 
+    /***
+     * 中国银行的时间戳表格
+     */
+    public static String DATE_ZGYH_TABLE = "ZGYHDate";
+
+    /***
+     * 中国银行的数据表格
+     */
+    public static String RATE_ZGYH_TABLE = "ZGYHRate";
 
     /***
      *

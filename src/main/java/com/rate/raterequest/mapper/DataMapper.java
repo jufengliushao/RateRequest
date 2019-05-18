@@ -2,7 +2,7 @@ package com.rate.raterequest.mapper;
 
 import com.rate.raterequest.bean.CountryInfoModel;
 import com.rate.raterequest.bean.DataModel;
-import com.rate.raterequest.common.DBTables;
+import com.rate.raterequest.bean.WebZGYHDateModel;
 import org.apache.ibatis.annotations.*;
 
 /***
@@ -69,4 +69,57 @@ public interface DataMapper {
                                 @Param("vrtName") String vrtName,
                                 @Param("vrtEName") String vrtEName,
                                 String tableName);
+
+    /***
+     * 根据中国银行的货币中文名称获取数据
+     * @param moneyName
+     * @param tableName
+     * @return
+     */
+    @Select("select * from ${tableName} where money_cn = '${moneyName}'")
+    public CountryInfoModel getCountryInfoZGYH(@Param("moneyName") String moneyName,
+                                               @Param("tableName") String tableName);
+
+    /***
+     * 向中国银行的时间戳中插入数据
+     * @param date
+     * @param time
+     * @param tableName
+     */
+    @Insert("insert into ${tableName} (date, time) values('${date}', '${time}')")
+    public void saveZGYHDateInfo(@Param("date") String date,
+                                 @Param("time") String time,
+                                 @Param("tableName") String tableName);
+
+
+    /****
+     * 找到最新的中国银行的时间戳
+     * @param tableName
+     * @return
+     */
+    @Select("select *from ${tableName} order by id desc limit 0,1 ")
+    public WebZGYHDateModel getZGYHTimeLast(@Param("tableName") String tableName);
+
+
+    /***
+     * 存入数据
+     * @param xhBuyRate
+     * @param xhSellRate
+     * @param moneyBuyRate
+     * @param moneySellRate
+     * @param zhRate
+     * @param country_id
+     * @param time_id
+     * @param tableName
+     */
+    @Insert("insert into ${tableName} (xhBuyRate, xhSellRate, moneyBuyRate, moneySellRate, zhRate, country_id, time_id)" +
+            "values ('${xhBuyRate}', '${xhSellRate}', '${moneyBuyRate}', '${moneySellRate}', '${zhRate}', ${country_id}, ${time_id})")
+    public void saveZGYHRateInfo(@Param("xhBuyRate") String xhBuyRate,
+                                 @Param("xhSellRate") String xhSellRate,
+                                 @Param("moneyBuyRate") String moneyBuyRate,
+                                 @Param("moneySellRate") String moneySellRate,
+                                 @Param("zhRate") String zhRate,
+                                 @Param("country_id") int country_id,
+                                 @Param("time_id") int time_id,
+                                 @Param("tableName") String tableName);
 }

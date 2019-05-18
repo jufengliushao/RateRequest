@@ -119,6 +119,9 @@ public class WebZGYHModel {
         this.announceTime = announceTime;
     }
 
+    public WebZGYHModel() {
+    }
+
     @Override
     public String toString() {
         return "WebZGYHModel{" +
