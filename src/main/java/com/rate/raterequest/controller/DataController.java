@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,6 +37,7 @@ public class DataController {
 
     @RequestMapping("/requestNewData")
     @Scheduled(cron = "0 16 9 ? * * ") // 每天上午9:16分触发
+    @CrossOrigin
     public ResponseModel requestData() {
         RateModel rateModel = rmyhService.getNewDatas(httpAPIService);
         ResponseModel responseModel;
@@ -51,10 +53,10 @@ public class DataController {
      * @return
      */
     @RequestMapping("/getZGYHRate")
+    @CrossOrigin
+    @Scheduled(cron = "0 0 0/1 * * ?") // 每隔1小时请求一次
     public String requestZGYH() {
         zgyhService.getNewRateFromZGYH();
         return "success";
     }
-
-
 }

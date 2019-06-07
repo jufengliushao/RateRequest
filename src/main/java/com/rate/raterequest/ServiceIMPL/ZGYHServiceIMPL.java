@@ -81,8 +81,14 @@ public class ZGYHServiceIMPL implements ZGYHService {
     }
 
     @Override
-    public void saveDateInfo(WebZGYHDateModel date, String tableName) {
-        dataMapper.saveZGYHDateInfo(date.getDate(), date.getTime(), tableName);
+    public boolean saveDateInfo(WebZGYHDateModel date, String tableName) {
+        // 先查看是否有对应的数据
+        int count = dataMapper.checkZGYHTimeExist(date.getDate(), date.getTime(), tableName);
+        if (count == 0){
+            dataMapper.saveZGYHDateInfo(date.getDate(), date.getTime(), tableName);
+            return true;
+        }
+        return false;
     }
 
     @Override

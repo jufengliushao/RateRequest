@@ -74,7 +74,11 @@ public class DataSaving {
         WebZGYHDateModel date = new WebZGYHDateModel();
         date.setDate(models.get(1).getAnnounceDate());
         date.setTime(models.get(1).getAnnounceTime());
-        _zgyhService.saveDateInfo(date, DBTables.DATE_ZGYH_TABLE);
+
+        boolean isExist = _zgyhService.saveDateInfo(date, DBTables.DATE_ZGYH_TABLE);
+        if (!isExist){
+            return;
+        }
 
         date = _zgyhService.getLastDateInfo(DBTables.DATE_ZGYH_TABLE);
         for(WebZGYHModel m : models){

@@ -91,6 +91,17 @@ public interface DataMapper {
                                  @Param("time") String time,
                                  @Param("tableName") String tableName);
 
+    /***
+     * 检查中国银行时间戳是否重复
+     * @param date
+     * @param time
+     * @param tableName
+     * @return
+     */
+    @Select("select count(*) from ${tableName} where date='${date}' and time = '${time}'")
+    public int checkZGYHTimeExist(@Param("date") String date,
+                                  @Param("time") String time,
+                                  @Param("tableName") String tableName);
 
     /****
      * 找到最新的中国银行的时间戳

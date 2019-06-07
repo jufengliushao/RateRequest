@@ -26,7 +26,7 @@ public interface ZGYHService {
      * @param date
      * @param tableName
      */
-    public void saveDateInfo(WebZGYHDateModel date, String tableName);
+    public boolean saveDateInfo(WebZGYHDateModel date, String tableName);
 
     /***
      * 获取最新的时间戳数据
